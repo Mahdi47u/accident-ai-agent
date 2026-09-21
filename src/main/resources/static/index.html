@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Accident Aid</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <main class="app">
+      <header>
+        <div>
+          <strong>Accident Aid</strong>
+          <span>Spring AI + OpenRouter</span>
+        </div>
+        <button id="seed" class="secondary" type="button">Index guidance</button>
+      </header>
+
+      <section class="emergency-note" role="note">
+        If someone is in immediate danger, unresponsive, not breathing normally, or bleeding severely, call your local
+        emergency service now. This test app is not medical care.
+      </section>
+
+      <section id="messages" class="messages" aria-live="polite">
+        <article class="message assistant">
+          <b>Assistant</b>
+          <p>Describe the accident and what you can observe. I’ll use the safety tools without guessing missing facts.</p>
+        </article>
+      </section>
+
+      <div class="suggestions" aria-label="Example questions">
+        <button type="button">A person fell and is not responding</button>
+        <button type="button">What should I do for severe bleeding?</button>
+        <button type="button">Check road weather at 35.6892, 51.3890</button>
+      </div>
+
+      <form id="chat-form">
+        <label for="message">Your question</label>
+        <div class="composer">
+          <textarea id="message" maxlength="4000" rows="3" placeholder="Describe what happened…" required></textarea>
+          <button id="send" type="submit">Send</button>
+        </div>
+      </form>
+    </main>
+    <script src="/app.js"></script>
+  </body>
+</html>
+

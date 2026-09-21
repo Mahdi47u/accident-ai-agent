@@ -1,0 +1,35 @@
+spring:
+  application:
+    name: accident-ai
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5448/accident_ai}
+    username: ${SPRING_DATASOURCE_USERNAME:accident_ai}
+    password: ${SPRING_DATASOURCE_PASSWORD:accident_ai}
+  ai:
+    model:
+      chat: openai
+      embedding: openai
+    openai:
+      api-key: ${OPENROUTER_API_KEY:not-configured}
+      base-url: https://openrouter.ai/api
+      timeout: 45s
+      max-retries: 1
+      chat:
+        options:
+          model: ${OPENROUTER_CHAT_MODEL:openrouter/free}
+          temperature: 0.2
+      embedding:
+        options:
+          model: ${OPENROUTER_EMBEDDING_MODEL:liquid/lfm-2.5-embedding-350m:free}
+          dimensions: 1024
+    vectorstore:
+      pgvector:
+        initialize-schema: true
+        index-type: HNSW
+        distance-type: COSINE_DISTANCE
+        dimensions: 1024
+        table-name: accident_guidance
+
+server:
+  error:
+    include-message: never

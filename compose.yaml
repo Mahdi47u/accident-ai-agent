@@ -1,0 +1,40 @@
+services:
+  database:
+    image: pgvector/pgvector:pg17
+    environment:
+      POSTGRES_DB: accident_ai
+      POSTGRES_USER: accident_ai
+      POSTGRES_PASSWORD: accident_ai
+    ports:
+      - "5448:5432"
+    volumes:
+      - pg-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U accident_ai -d accident_ai"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+
+  app:
+    image: maven:3.9.11-eclipse-temurin-21-alpine
+    working_dir: /workspace
+    command: ["mvn", "spring-boot:run"]
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://database:5432/accident_ai
+      SPRING_DATASOURCE_USERNAME: accident_ai
+      SPRING_DATASOURCE_PASSWORD: accident_ai
+      OPENROUTER_API_KEY: ${OPENROUTER_API_KEY:-not-configured}
+      OPENROUTER_CHAT_MODEL: ${OPENROUTER_CHAT_MODEL:-openai/gpt-4o-mini}
+      OPENROUTER_EMBEDDING_MODEL: ${OPENROUTER_EMBEDDING_MODEL:-openai/text-embedding-3-small}
+    ports:
+      - "8088:8080"
+    volumes:
+      - .:/workspace
+      - maven-cache:/root/.m2
+    depends_on:
+      database:
+        condition: service_healthy
+
+volumes:
+  pg-data:
+  maven-cache:
